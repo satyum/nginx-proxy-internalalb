@@ -1,0 +1,88 @@
+# version: '3'
+# services:
+
+#   mainapp:
+#     image: nginx:latest
+#     hostname: mainapp
+#     container_name: mainapp
+#     ports:
+#       - 8171:80
+#     volumes:
+#       - /home/satyam/Documents/docker/nginx/conf.d:/etc/nginx/conf.d
+#     networks:
+#       - mynet
+#   app1:
+#     # depends_on:
+#     #   - mainapp
+#     image: nginx:latest
+#     hostname: app1
+#     container_name: app1
+#     ports:
+#       - 8172:80    
+#     volumes:
+#       - app1conf.d:/etc/nginx/conf.d
+#       # - Frontend:/usr/share/nginx/html/
+#     networks:
+#       - mynet
+#   app2:
+#     # depends_on:
+#     #   - mainapp
+#     image: nginx:latest
+#     hostname: app2
+#     container_name: app2
+#     ports:
+#       - 8173:80 
+#     volumes:
+#       - app2conf.d:/etc/nginx/nginx/conf.d
+#     networks:
+#       - mynet
+# volumes:
+#   app2conf.d:
+#   app1conf.d:
+#   # conf.d:
+# networks:
+#   mynet:
+#    driver: bridge
+
+
+
+version: '3.3'
+services:
+
+    gateway:
+        image: nginx:latest
+        hostname: gateway
+        container_name: gateway
+        ports:
+        - "8171:80"
+
+        
+        volumes:
+          - /home/satyam/Documents/docker/nginx/conf.d:/etc/nginx/conf.d
+          - /home/satyam/Documents/docker/nginx/gateway:/usr/share/nginx/html/
+        depends_on:
+          - app1
+          - app2
+
+    app1:
+
+        # container_name: app1
+        environment:
+          HOST_APP1: container1
+        ports:
+            - '8172:80'
+        image: nginx:latest
+        volumes:
+          - /home/satyam/Documents/docker/nginx/app1:/usr/share/nginx/html/
+      
+
+    app2:
+        hostname: app2
+        container_name: app2
+        ports:
+            - '8173:80'
+        image: nginx:latest
+        volumes:
+          - /home/satyam/Documents/docker/nginx/app2:/usr/share/nginx/html/
+
+       
